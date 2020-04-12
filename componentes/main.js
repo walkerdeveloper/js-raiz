@@ -54,7 +54,7 @@ function renderizaItemCarrinho(item){
                 <h5 class="card-title">${item.nome}</h5>
                 <p class="card-text">Preço unidade: R$${item.preco},00 | Quantidade: ${item.quantidade}</p>
                 <p class="card-text">Valor: R$${item.preco * item.quantidade},00</p>
-                <button href="#" data-value="300" class="btn btn-danger btn-sm">Remover</button>
+                <button data-produto-id="${item.id}" href="#" data-value="300" class="btn btn-danger btn-sm btn-remove">Remover</button>
             </div>
         </div>
     `
@@ -89,6 +89,18 @@ document.body.addEventListener('click', (event) =>{
         const produto = produtos[index];
 
         adicionaItemNoCarrinho(produto);
+    }
+
+    if (event.target.classList.contains('btn-remove')){
+        const produtoId = event.target.getAttribute('data-produto-id');
+
+        if(carrinhoItens[produtoId].quantidade <= 1){
+            delete carrinhoItens[produtoId];
+        } else{
+            --carrinhoItens[produtoId].quantidade;
+        }
+        renderizaCarrinho();
+        renderCarrinhoTotal();
     }
 });
 
