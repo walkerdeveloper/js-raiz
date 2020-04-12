@@ -28,6 +28,7 @@ const carrinhoItens = {
         id: 'bbc123',
         nome: 'JSRaiz para Node',
         preco: 1200,
+        quantidade: 1,
         descricao: 'O melhor curso de todos',
         imagem: 'http://lorempixel.com/400/200' 
     },
@@ -36,12 +37,12 @@ const carrinhoItens = {
         id: 'cbc123',
         nome: 'Programação funcional com JS',
         preco: 500,
+        quantidade: 2,
         descricao: 'O melhor funcional de todos',
         imagem: 'http://lorempixel.com/400/200' 
     }
 }
 
-console.log(carrinhoItens)
 
 function renderizaProduto(produto){
     return `
@@ -65,18 +66,27 @@ function renderizaProdutos(){
     return produtos.map(produto => renderizaProduto(produto)).join('');
 };
 
-function renderizaCarrinho(){
+function renderizaItemCarrinho(item){
     return `
         <div class="card carrinho__item">
             <div class="card-body">
-                <h5 class="card-title">JSRaiz para FW</h5>
-                <p class="card-text">Preço unidade: R$300,00 | Quantidade: 2</p>
-                <p class="card-text">Valor: R$600,00</p>
+                <h5 class="card-title">${item.nome}</h5>
+                <p class="card-text">Preço unidade: R$${item.preco},00 | Quantidade: ${item.quantidade}</p>
+                <p class="card-text">Valor: R$${item.preco * item.quantidade},00</p>
                 <button href="#" data-value="300" class="btn btn-danger btn-sm">Adicionar</button>
             </div>
         </div>
     `
 }
 
+function renderizaCarrinho(){
+    let html = '';
+    for(produtoId in carrinhoItens){
+        html += renderizaItemCarrinho(carrinhoItens[produtoId]);
+    }
+    return html;
+}
+
 document.querySelector('.loja').innerHTML = renderizaProdutos();
 document.querySelector('.carrinho__itens').innerHTML = renderizaCarrinho();
+renderizaCarrinho()
