@@ -68,17 +68,22 @@ function renderizaCarrinho(){
     document.querySelector('.carrinho__itens').innerHTML = html;
 }
 
+function adicionaItemNoCarrinho(produto){
+    
+    if(!carrinhoItens[produto.id]){
+        carrinhoItens[produto.id] = produto;
+        carrinhoItens[produto.id].quantidade = 1;          
+    } 
+
+    renderizaCarrinho();
+}
+
 document.body.addEventListener('click', (event) =>{
     if(event.target.classList.contains('btn-add')){
-        const index = event.target.getAttribute('data-index');
+        const index = parseInt(event.target.getAttribute('data-index'), 10);
         const produto = produtos[event.target.getAttribute('data-index')];
 
-        if(!carrinhoItens[produto.id]){
-            carrinhoItens[produto.id] = produto;
-            carrinhoItens[produto.id].quantidade = 1;          
-        } 
-
-        renderizaCarrinho();
+        adicionaItemNoCarrinho(produto);
     }
 })
 
