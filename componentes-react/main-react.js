@@ -31,7 +31,10 @@ function ProdutoComponent(props){
                         React.createElement('h5', { className: 'card-title'}, props.item.nome),
                         React.createElement('small', null, props.item.descricao),
                         React.createElement('p', { className: "card-text" }, `R$${props.item.preco},00`),
-                        React.createElement('button', { className: "btn btn-primary", onClick: props.onAddCarrinho }, 'Adicionar')
+                        React.createElement('button', { className: "btn btn-primary",
+                                                        onClick: props.onAddCarrinho.bind(null, props.item) }
+                                            , 'Adicionar'
+                        )
                 )   
             )
         )
@@ -106,8 +109,8 @@ function AppComponente(){
         }
     }
 
-    function addCarrinho(){
-        console.log('Oi produto');
+    function addCarrinho(produto){
+        console.log(produto);
     }
     return (
             React.createElement(React.Fragment, null,
