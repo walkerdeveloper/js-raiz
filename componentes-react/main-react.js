@@ -46,13 +46,14 @@ function ListaProdutosComponet(props){
     );
 };
 
-function CarrinhoItemComponent(){
+function CarrinhoItemComponent(item){
     return(
         React.createElement('div', { className: 'carrinho__itens'},
             React.createElement('div', { className: 'card carrinho__item'},
                 React.createElement('div', { className: 'card-body'},
-                    React.createElement('h5', { className: 'card-title'}, 'JSRaiz para FW'),
-                    React.createElement('p', { className: "card-text" }, 'Preço unidade: R$300,00 | Quantidade: 2'),
+                    React.createElement('h5', { className: 'card-title'}, item.nome),
+                    React.createElement('p', { className: "card-text" }, `Preço unidade: R$${item.preco},00 | Quantidade: ${item.quantidade}`),
+                    React.createElement('p', { className: "card-text" }, `Valor: R$${item.preco * item.quantidade},00`),
                     React.createElement('button', { className: "btn btn-danger btn-sm" }, 'Remover')
                 )
             )
@@ -60,26 +61,51 @@ function CarrinhoItemComponent(){
     );
 };
 
-function CarrinhoTotalComponent(){
+function CarrinhoTotalComponent(itens){
+    
+    function valorTotal(carrinhoItens){
+        console.log(typeof(carrinhoItens))
+        return Object.values(carrinhoItens).reduce((acc, itemAtual) => acc += (itemAtual.preco * itemAtual.quantidade), 0);
+    };
+
     return(
         React.createElement('h6', null, 'Total: ',
-            React.createElement('strong', null, 'R$600,00')
+            React.createElement('strong', null, `R$${valorTotal(itens)},00`)
         )
     );
 };
 
-function CarrinhoComponent(){
+function CarrinhoComponent(props){
+    let arr = Object.values(props.itens);
     return (
         React.createElement('div', { className: 'carrinho'},
-            React.createElement(CarrinhoItemComponent),
+            arr.map( item => React.createElement(CarrinhoItemComponent, item) ),
             React.createElement('div', { className: 'carrinho__total mt-2 p-3"'},
-                React.createElement(CarrinhoTotalComponent)
+                React.createElement(CarrinhoTotalComponent, props.itens)
             )
         )
     );
 };
 
 function AppComponente(){
+    const carrinhoItens = {
+        'bbc123': {
+            id: 'bbc123',
+            nome: 'JSRaiz para Node',
+            preco: 1200,
+            descricao: 'O melhor curso de todos',
+            imagem: 'http://lorempixel.com/400/200',
+            quantidade: 1
+        },
+        'cbc123': {
+            id: 'cbc123',
+            nome: 'Programação funcional com JS',
+            preco: 500,
+            descricao: 'O melhor funcional de todos',
+            imagem: 'http://lorempixel.com/400/200',
+            quantidade: 2
+        }
+    }
     return (
             React.createElement(React.Fragment, null,
                 React.createElement('div', { className: 'col-sm-8'}, 
@@ -87,7 +113,7 @@ function AppComponente(){
             )
             ,
             React.createElement('div', { className: 'col-sm-4'}, 
-                React.createElement(CarrinhoComponent)
+                React.createElement(CarrinhoComponent, { itens: carrinhoItens })
             )   
         )
     );
