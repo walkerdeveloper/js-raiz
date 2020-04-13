@@ -34,7 +34,7 @@ function ProdutoComponent(props){
                         React.createElement('button', { className: "btn btn-primary",
                                                         onClick: props.onAddCarrinho.bind(null, props.item) }
                                             , 'Adicionar'
-                        )
+                    )
                 )   
             )
         )
@@ -90,27 +90,26 @@ function CarrinhoComponent(props){
 };
 
 function AppComponente(){
-    const carrinhoItens = {
-        'bbc123': {
-            id: 'bbc123',
-            nome: 'JSRaiz para Node',
-            preco: 1200,
-            descricao: 'O melhor curso de todos',
-            imagem: 'http://lorempixel.com/400/200',
-            quantidade: 1
-        },
-        'cbc123': {
-            id: 'cbc123',
-            nome: 'Programação funcional com JS',
-            preco: 500,
-            descricao: 'O melhor funcional de todos',
-            imagem: 'http://lorempixel.com/400/200',
-            quantidade: 2
-        }
-    }
+    const [ carrinhoItens, addItemCarrinho ] = React.useState({});
 
     function addCarrinho(produto){
-        console.log(produto);
+        if(!carrinhoItens[produto.id]){
+            addItemCarrinho({
+               ...carrinhoItens,
+                [produto.id]: {
+                    ...produto,
+                    quantidade: 1
+                }
+            });
+        } else{
+            addItemCarrinho({
+               ...carrinhoItens,
+                [produto.id]: {
+                    ...produto,
+                    quantidade: ++carrinhoItens[produto.id].quantidade
+                }
+            });
+        }
     }
     return (
             React.createElement(React.Fragment, null,
