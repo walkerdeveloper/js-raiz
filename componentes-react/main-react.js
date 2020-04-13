@@ -1,12 +1,36 @@
-function ProdutoComponent(){
+const produtosLista = [
+    {
+        id: 'abc123',
+        nome: 'JSRaiz para FW',
+        preco: 300,
+        descricao: 'O melhor curso do mundo',
+        imagem: 'http://lorempixel.com/400/200' 
+    },
+    {
+        id: 'bbc123',
+        nome: 'JSRaiz para Node',
+        preco: 1200,
+        descricao: 'O melhor curso de todos',
+        imagem: 'http://lorempixel.com/400/200' 
+    },
+    {
+        id: 'cbc123',
+        nome: 'Programação funcional com JS',
+        preco: 500,
+        descricao: 'O melhor funcional de todos',
+        imagem: 'http://lorempixel.com/400/200' 
+    }
+];
+
+function ProdutoComponent(produto){
     return(
         React.createElement('div', { className: 'col-sm-4 mb-3'},
                 React.createElement('div', { className: 'card loja__item'},
-                    React.createElement('img', { className: 'card-img-top', src:"http://lorempixel.com/400/200"}),
+                    React.createElement('img', { className: 'card-img-top', src:produto.imagem}),
                     React.createElement('div', { className: 'card-body' },
-                        React.createElement('h5', { className: 'card-title'}, 'JSRaiz para FW'),
-                        React.createElement('small', null, 'R$300,00'),
-                        React.createElement('p', { className: "card-text" }, 'O melhor curso do mundo'),
+                        React.createElement('h5', { className: 'card-title'}, produto.nome),
+                        React.createElement('small', null, produto.descricao),
+                        React.createElement('p', { className: "card-text" }, `R$${produto.preco},00`),
                         React.createElement('button', { className: "btn btn-primary" }, 'Adicionar')
                 )   
             )
@@ -14,15 +38,10 @@ function ProdutoComponent(){
     );
 };
 
-function ListaProdutosComponet(){
+function ListaProdutosComponet(props){
     return (
             React.createElement('div', { className: 'row loja'},
-                React.createElement(ProdutoComponent),
-                React.createElement(ProdutoComponent),
-                React.createElement(ProdutoComponent),
-                React.createElement(ProdutoComponent),
-                React.createElement(ProdutoComponent),
-                React.createElement(ProdutoComponent)
+                props.itens.map(produto => React.createElement(ProdutoComponent, produto))
         )   
     );
 };
@@ -64,7 +83,7 @@ function AppComponente(){
     return (
             React.createElement(React.Fragment, null,
                 React.createElement('div', { className: 'col-sm-8'}, 
-                React.createElement(ListaProdutosComponet)
+                React.createElement(ListaProdutosComponet, { itens: produtosLista })
             )
             ,
             React.createElement('div', { className: 'col-sm-4'}, 
