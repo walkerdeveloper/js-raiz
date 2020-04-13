@@ -41,7 +41,7 @@ function ProdutoComponent(props){
 function ListaProdutosComponet(props){
     return (
             React.createElement('div', { className: 'row loja'},
-                props.itens.map(produto => React.createElement(ProdutoComponent, { item: produto, onAddCarrinho: props.onAddCarrinho }))
+                props.children
         )   
     );
 };
@@ -64,7 +64,6 @@ function CarrinhoItemComponent(item){
 function CarrinhoTotalComponent(itens){
 
     function valorTotal(carrinhoItens){
-        console.log(typeof(carrinhoItens))
         return Object.values(carrinhoItens).reduce((acc, itemAtual) => acc += (itemAtual.preco * itemAtual.quantidade), 0);
     };
 
@@ -113,7 +112,12 @@ function AppComponente(){
     return (
             React.createElement(React.Fragment, null,
                 React.createElement('div', { className: 'col-sm-8'}, 
-                React.createElement(ListaProdutosComponet, { itens: produtosLista, onAddCarrinho: addCarrinho })
+                React.createElement(ListaProdutosComponet, null,
+                    produtosLista.map(produto => 
+                        React.createElement(ProdutoComponent, { item: produto, onAddCarrinho: addCarrinho }
+                        )
+                    )
+                )
             )
             ,
             React.createElement('div', { className: 'col-sm-4'}, 
