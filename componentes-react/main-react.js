@@ -49,14 +49,14 @@ function ListaProdutosComponet(props){
     );
 };
 
-function CarrinhoItemComponent(item){
+function CarrinhoItemComponent(props){
     return(
         React.createElement('div', { className: 'carrinho__itens'},
             React.createElement('div', { className: 'card carrinho__item'},
                 React.createElement('div', { className: 'card-body'},
-                    React.createElement('h5', { className: 'card-title'}, item.nome),
-                    React.createElement('p', { className: "card-text" }, `Preço unidade: R$${item.preco},00 | Quantidade: ${item.quantidade}`),
-                    React.createElement('p', { className: "card-text" }, `Valor: R$${item.preco * item.quantidade},00`),
+                    React.createElement('h5', { className: 'card-title'}, props.item.nome),
+                    React.createElement('p', { className: "card-text" }, `Preço unidade: R$${props.item.preco},00 | Quantidade: ${props.item.quantidade}`),
+                    React.createElement('p', { className: "card-text" }, `Valor: R$${props.item.preco * props.item.quantidade},00`),
                     React.createElement('button', { className: "btn btn-danger btn-sm" }, 'Remover')
                 )
             )
@@ -81,8 +81,8 @@ function CarrinhoComponent(props){
     let arr = Object.values(props.itens);
     return (
         React.createElement('div', { className: 'carrinho'},
-            arr.map( item => React.createElement(CarrinhoItemComponent, item) ),
-            React.createElement('div', { className: 'carrinho__total mt-2 p-3"'},
+            arr.map( (carrinhoItem, index) => React.createElement(CarrinhoItemComponent, { item: carrinhoItem, key: `item-carrinho-${index}` }) ),
+            React.createElement('div', { className: 'carrinho__total mt-2 p-3'},
                 React.createElement(CarrinhoTotalComponent, props.itens)
             )
         )
@@ -116,8 +116,8 @@ function AppComponente(){
             React.createElement(React.Fragment, null,
                 React.createElement('div', { className: 'col-sm-8'}, 
                 React.createElement(ListaProdutosComponet, null,
-                    produtosLista.map(produto => 
-                        React.createElement(ProdutoComponent, { item: produto, onAddCarrinho: addCarrinho }
+                    produtosLista.map((produto, index) => 
+                        React.createElement(ProdutoComponent, { item: produto, onAddCarrinho: addCarrinho, key: `produto-${index}` }
                         )
                     )
                 )
