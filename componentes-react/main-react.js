@@ -22,16 +22,16 @@ const produtosLista = [
     }
 ];
 
-function ProdutoComponent(produto){
+function ProdutoComponent(props){
     return(
         React.createElement('div', { className: 'col-sm-4 mb-3'},
                 React.createElement('div', { className: 'card loja__item'},
-                    React.createElement('img', { className: 'card-img-top', src:produto.imagem}),
+                    React.createElement('img', { className: 'card-img-top', src:props.item.imagem}),
                     React.createElement('div', { className: 'card-body' },
-                        React.createElement('h5', { className: 'card-title'}, produto.nome),
-                        React.createElement('small', null, produto.descricao),
-                        React.createElement('p', { className: "card-text" }, `R$${produto.preco},00`),
-                        React.createElement('button', { className: "btn btn-primary" }, 'Adicionar')
+                        React.createElement('h5', { className: 'card-title'}, props.item.nome),
+                        React.createElement('small', null, props.item.descricao),
+                        React.createElement('p', { className: "card-text" }, `R$${props.item.preco},00`),
+                        React.createElement('button', { className: "btn btn-primary", onClick: props.onAddCarrinho }, 'Adicionar')
                 )   
             )
         )
@@ -41,7 +41,7 @@ function ProdutoComponent(produto){
 function ListaProdutosComponet(props){
     return (
             React.createElement('div', { className: 'row loja'},
-                props.itens.map(produto => React.createElement(ProdutoComponent, produto))
+                props.itens.map(produto => React.createElement(ProdutoComponent, { item: produto, onAddCarrinho: props.onAddCarrinho }))
         )   
     );
 };
@@ -62,7 +62,7 @@ function CarrinhoItemComponent(item){
 };
 
 function CarrinhoTotalComponent(itens){
-    
+
     function valorTotal(carrinhoItens){
         console.log(typeof(carrinhoItens))
         return Object.values(carrinhoItens).reduce((acc, itemAtual) => acc += (itemAtual.preco * itemAtual.quantidade), 0);
@@ -106,10 +106,14 @@ function AppComponente(){
             quantidade: 2
         }
     }
+
+    function addCarrinho(){
+        console.log('Oi produto');
+    }
     return (
             React.createElement(React.Fragment, null,
                 React.createElement('div', { className: 'col-sm-8'}, 
-                React.createElement(ListaProdutosComponet, { itens: produtosLista })
+                React.createElement(ListaProdutosComponet, { itens: produtosLista, onAddCarrinho: addCarrinho })
             )
             ,
             React.createElement('div', { className: 'col-sm-4'}, 
