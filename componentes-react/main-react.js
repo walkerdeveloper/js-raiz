@@ -50,6 +50,7 @@ function ListaProdutosComponet(props){
 };
 
 function CarrinhoItemComponent(props){
+    console.log('CarrinhoItemComponent: ', props.item)
     return(
         React.createElement('div', { className: 'carrinho__itens'},
             React.createElement('div', { className: 'card carrinho__item'},
@@ -57,7 +58,7 @@ function CarrinhoItemComponent(props){
                     React.createElement('h5', { className: 'card-title'}, props.item.nome),
                     React.createElement('p', { className: "card-text" }, `Preço unidade: R$${props.item.preco},00 | Quantidade: ${props.item.quantidade}`),
                     React.createElement('p', { className: "card-text" }, `Valor: R$${props.item.preco * props.item.quantidade},00`),
-                    React.createElement('button', { className: "btn btn-danger btn-sm" }, 'Remover')
+                    React.createElement('button', { className: "btn btn-danger btn-sm", onClick: props.onRemoveItemCarrinho.bind(null, props.item.id) }, 'Remover')
                 )
             )
         )
@@ -78,10 +79,13 @@ function CarrinhoTotalComponent(itens){
 };
 
 function CarrinhoComponent(props){
-    let arr = Object.values(props.itens);
     return (
         React.createElement('div', { className: 'carrinho'},
-            arr.map( (carrinhoItem, index) => React.createElement(CarrinhoItemComponent, { item: carrinhoItem, key: `item-carrinho-${index}` }) ),
+            Object.values(props.itens).map( (carrinhoItem, index) => React.createElement( CarrinhoItemComponent, 
+                                                                                        { item: carrinhoItem, 
+                                                                                          key: `item-carrinho-${index}`, 
+                                                                                          onRemoveItemCarrinho: props.onRemoveItemCarrinho } ) 
+            ),
             React.createElement('div', { className: 'carrinho__total mt-2 p-3'},
                 React.createElement(CarrinhoTotalComponent, props.itens)
             )
@@ -111,6 +115,23 @@ function AppComponente(){
             });
         }
     }
+
+    function removeItemCarrinho(produtoId){
+        console.log('Produto escolhido ', carrinhoItens[produtoId])
+        if(carrinhoItens[produtoId].quantidade <= 1){
+            delete carrinhoItens[produtoId];
+            addItemCarrinho({ ...carrinhoItens })
+        } else {
+            addItemCarrinho({
+                ...carrinhoItens,
+                 [produtoId]: {
+                     ...carrinhoItens[produtoId],
+                     quantidade: --carrinhoItens[produtoId].quantidade
+                 }
+             });
+        }
+    }
+
     return (
             React.createElement(React.Fragment, null,
                 React.createElement('div', { className: 'col-sm-8'}, 
@@ -123,7 +144,8 @@ function AppComponente(){
             )
             ,
             React.createElement('div', { className: 'col-sm-4'}, 
-                React.createElement(CarrinhoComponent, { itens: carrinhoItens })
+                React.createElement(CarrinhoComponent, { itens: carrinhoItens, onRemoveItemCarrinho: removeItemCarrinho }
+                )
             )   
         )
     );
